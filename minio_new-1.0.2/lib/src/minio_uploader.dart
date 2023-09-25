@@ -92,7 +92,8 @@ class MinioUploader implements StreamConsumer<Uint8List> {
   @override
   Future<String?> close() async {
     if (_uploadId == null) return _etag;
-    return minio.completeMultipartUpload(bucket, object, _uploadId!, _parts.keys.toList());
+    return minio.completeMultipartUpload(
+        bucket, object, _uploadId!, _parts.keys.toList());
   }
 
   Map<String, String> getHeaders(List<int> chunk) {
@@ -130,13 +131,21 @@ class MinioUploader implements StreamConsumer<Uint8List> {
   }
 
   Future<void> _initMultipartUpload() async {
+    //FIXME: this code still causes Signature Error
+    //FIXME: https://github.com/xtyxtyx/minio-dart/issues/7
+    //TODO: uncomment when fixed
+    // uploadId = await minio.findUploadId(bucket, object);
+
     if (_uploadId == null) {
-      _uploadId = await minio.initiateNewMultipartUpload(bucket, object, metadata);
+      _uploadId =
+          await minio.initiateNewMultipartUpload(bucket, object, metadata);
       return;
     }
 
     final parts = minio.listParts(bucket, object, _uploadId!);
-    final entries = await parts.asyncMap((part) => MapEntry(part.partNumber, part)).toList();
+    final entries = await parts
+        .asyncMap((part) => MapEntry(part.partNumber, part))
+        .toList();
     _oldParts = Map.fromEntries(entries);
   }
 

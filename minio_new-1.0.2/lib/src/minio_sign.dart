@@ -15,7 +15,8 @@ String signV4(
 ) {
   final signedHeaders = getSignedHeaders(request.headers.keys);
   final hashedPayload = request.headers['x-amz-content-sha256'];
-  final canonicalRequest = getCanonicalRequest(request, signedHeaders, hashedPayload!);
+  final canonicalRequest =
+      getCanonicalRequest(request, signedHeaders, hashedPayload!);
   final stringToSign = getStringToSign(canonicalRequest, requestDate, region);
   final signingKey = getSigningKey(requestDate, region, minio.secretKey);
   final credential = getCredential(minio.accessKey, region, requestDate);
@@ -26,7 +27,12 @@ String signV4(
 }
 
 List<String> getSignedHeaders(Iterable<String> headers) {
-  const ignored = {'authorization', 'content-length', 'content-type', 'user-agent'};
+  const ignored = {
+    'authorization',
+    'content-length',
+    'content-type',
+    'user-agent'
+  };
   final result = headers.where((header) => !ignored.contains(header)).toList();
   result.sort();
   return result;
@@ -129,7 +135,8 @@ String presignSignatureV4(
     }),
   );
 
-  final canonicalRequest = getCanonicalRequest(request, signedHeaders, 'UNSIGNED-PAYLOAD');
+  final canonicalRequest =
+      getCanonicalRequest(request, signedHeaders, 'UNSIGNED-PAYLOAD');
 
   final stringToSign = getStringToSign(canonicalRequest, requestDate, region);
   final signingKey = getSigningKey(requestDate, region, minio.secretKey);

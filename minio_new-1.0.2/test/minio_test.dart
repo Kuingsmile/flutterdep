@@ -145,7 +145,8 @@ void testBucketExists() {
 
     test('bucketExists() returns false for a non-existent bucket', () async {
       final minio = getMinioClient();
-      expect(await minio.bucketExists('non-existing-bucket-name'), equals(false));
+      expect(
+          await minio.bucketExists('non-existing-bucket-name'), equals(false));
     });
 
     test('bucketExists() fails due to wrong access key', () async {
@@ -237,7 +238,8 @@ void testFPutObject() {
       await minio.fPutObject(bucketName, objectName, testFile.path, metadata);
 
       final stat = await minio.statObject(bucketName, objectName);
-      expect(stat.metaData![userDefinedMetadataKey], equals(userDefinedMetadataValue));
+      expect(stat.metaData![userDefinedMetadataKey],
+          equals(userDefinedMetadataValue));
     });
 
     test('fPutObject() with empty file', () async {
@@ -562,6 +564,7 @@ void testListenBucketNotification() {
     //   await minio.putObject(bucketName, objectName, Stream.value([0]));
     //   await minio.removeObject(bucketName, objectName);
 
+    //   // FIXME: Needs sleep here
     //   expect(receivedEvents, isNotEmpty);
 
     //   poller.stop();

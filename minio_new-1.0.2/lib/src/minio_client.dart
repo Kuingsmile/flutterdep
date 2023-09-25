@@ -140,7 +140,8 @@ class MinioClient {
 
     region ??= 'us-east-1';
 
-    final request = getBaseRequest(method, bucket, object, region, resource, queries, headers, onProgress);
+    final request = getBaseRequest(
+        method, bucket, object, region, resource, queries, headers, onProgress);
     request.body = payload;
 
     final date = DateTime.now().toUtc();

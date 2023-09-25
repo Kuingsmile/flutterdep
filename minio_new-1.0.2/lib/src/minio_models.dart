@@ -3,6 +3,8 @@ import 'package:minio/src/minio_errors.dart';
 import 'package:minio/src/utils.dart';
 import 'package:xml/xml.dart';
 
+import '../models.dart';
+
 class ListObjectsResult {
   ListObjectsResult({
     required this.objects,
@@ -42,7 +44,8 @@ class CompleteMultipartUpload {
 
   XmlNode toXml() {
     final builder = XmlBuilder();
-    builder.element('CompleteMultipartUpload', nest: parts.map((p) => p.toXml()));
+    builder.element('CompleteMultipartUpload',
+        nest: parts.map((p) => p.toXml()));
     return builder.buildDocument();
   }
 
@@ -55,7 +58,10 @@ class ListMultipartUploadsOutput {
     isTruncated = getProp(xml, 'IsLatest')?.text.toUpperCase() == 'TRUE';
     nextKeyMarker = getProp(xml, 'NextKeyMarker')?.text;
     nextUploadIdMarker = getProp(xml, 'NextUploadIdMarker')?.text;
-    uploads = xml.findElements('Upload').map((e) => MultipartUpload.fromXml(e)).toList();
+    uploads = xml
+        .findElements('Upload')
+        .map((e) => MultipartUpload.fromXml(e))
+        .toList();
   }
 
   bool? isTruncated;
@@ -67,7 +73,8 @@ class ListMultipartUploadsOutput {
 class ListPartsOutput {
   ListPartsOutput.fromXml(XmlElement xml) {
     isTruncated = getProp(xml, 'IsLatest')?.text.toUpperCase() == 'TRUE';
-    nextPartNumberMarker = int.parse(getProp(xml, 'NextPartNumberMarker')!.text);
+    nextPartNumberMarker =
+        int.parse(getProp(xml, 'NextPartNumberMarker')!.text);
     parts = xml.findElements('Upload').map((e) => Part.fromXml(e)).toList();
   }
 

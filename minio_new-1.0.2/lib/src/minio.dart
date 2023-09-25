@@ -15,6 +15,9 @@ import 'package:xml/xml.dart' as xml;
 import 'package:xml/xml.dart' show XmlElement;
 import 'package:xml2json/xml2json.dart';
 
+import '../models.dart';
+import 'minio_helpers.dart';
+
 class Minio {
   /// Initializes a new client object.
   Minio({
@@ -477,6 +480,12 @@ class Minio {
     final myTransformer = Xml2Json();
     myTransformer.parse(resp.body);
     Map responseMap = json.decode(myTransformer.toParker());
+    // validate(resp);
+    // final bucketsNode =
+    //     xml.XmlDocument.parse(resp.body).findAllElements('Buckets').first;
+    //return bucketsNode.children
+    //    .map((n) => Bucket.fromXml(n as XmlElement))
+    //     .toList();
     List<Bucket> buckets = [];
     if (responseMap['ListAllMyBucketsResult'] == null ||
         responseMap['ListAllMyBucketsResult']['Buckets'] == null ||
@@ -675,7 +684,7 @@ class Minio {
 
     if (maxKeys != null) {
       maxKeys = maxKeys >= 1000 ? 1000 : maxKeys;
-      queries['maxKeys'] = maxKeys.toString();
+      queries['max-keys'] = maxKeys.toString();
     }
 
     final resp = await _client.request(
