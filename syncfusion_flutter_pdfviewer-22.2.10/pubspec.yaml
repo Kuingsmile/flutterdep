@@ -33,9 +33,9 @@ dependencies:
   vector_math: ^2.1.0
   async: ^2.5.0
   http: ^1.0.0
-  uuid: ^3.0.5
+  uuid: ^4.4.2
   device_info_plus: ^9.0.2
-  intl: ^0.17.0
+  intl: ^0.19.0
 
   syncfusion_pdfviewer_platform_interface: ^22.2.10     
 
